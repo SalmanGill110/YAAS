@@ -1,0 +1,51 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Tarjous{% endblock %}
+{% block body %}
+{% load app_filters %}
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if error_message %}
+                        <p style="color: red"><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <strong>Huutokauppa Kuvaus : </strong> {{ auction.description }}<br/>
+                     {% if auction.bid_price %}
+                     <strong>Nykyinen Hinta : </strong> {{ auction.bid_price }} EUR<br/><br/>
+                     {% else %}
+                     <strong>Nykyinen Hinta : </strong> {{ auction.starting_price }} EUR<br/><br/>
+                     {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="revision" value="{{ auction.revision }}" />
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Tarjous</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Mikä on nykyinen hinta?</h3>
+                    <p>Nykyinen hinta on korkein tarjoushinta. Jos tarjoajia ei ole, nykyinen hinta on huutokauppahinta</p>
+                    <h3>Missä valuutassa hinnoittelen?</h3>
+                    <p>Voit tehdä tarjouksia vain euroissa.</p>
+                    <h3>Kuinka paljon voin tarjota?</h3>
+                    <p>Voit tarjota niin paljon kuin haluat, mutta hintatarjouksesi pitäisi olla korkeampi kuin nykyinen hinta... </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

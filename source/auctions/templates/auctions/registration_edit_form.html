@@ -1,0 +1,41 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!--<h3>Register for an Account</h3>-->
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>How can I change email?</h3>
+                    <p>You can change email address by over-writing your email id in given box.</p>
+                    <h3>What if I don't want to change password?</h3>
+                    <p>If you don't want to change your old password , you may write the old one. Its for confirmation purpose as well. </p>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

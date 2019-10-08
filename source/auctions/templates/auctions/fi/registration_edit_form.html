@@ -1,0 +1,41 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Muokkaa Profiilia{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!--<h3>Register for an Account</h3>-->
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Lähetä</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Kuinka voin vaihtaa sähköpostia?</h3>
+                    <p>Voit vaihtaa sähköpostiosoitetta korvaamalla sähköpostiosoitteesi(email) tietyssä kentässä</p>
+                    <h3>Entä jos en halua vaihtaa salasanaa?</h3>
+                    <p>Jos et halua vaihtaa vanhaa salasanaasi(password), voit kirjoittaa vanhan salasanan. Se on myös vahvistusta varten</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

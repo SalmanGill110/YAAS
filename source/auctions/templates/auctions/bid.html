@@ -1,0 +1,51 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Bid{% endblock %}
+{% block body %}
+{% load app_filters %}
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if error_message %}
+                        <p style="color: red"><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <strong>Auction Description : </strong> {{ auction.description }}<br/>
+                     {% if auction.bid_price %}
+                     <strong>Current Price : </strong> {{ auction.bid_price }} EUR<br/><br/>
+                     {% else %}
+                     <strong>Current Price : </strong> {{ auction.starting_price }} EUR<br/><br/>
+                     {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="revision" value="{{ auction.revision }}" />
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Bid</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>What is current price?</h3>
+                    <p>Current price is equal to highest bid amount. If there are no bidders, current price is auction starting price</p>
+                    <h3>In which currency I am bidding</h3>
+                    <p>You can bid in EURO only for now. </p>
+                    <h3>How much amount can I bid</h3>
+                    <p>You can bid as much as you want, however your bid should be higher than current price... </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

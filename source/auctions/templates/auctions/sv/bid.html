@@ -1,0 +1,51 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Bud{% endblock %}
+{% block body %}
+{% load app_filters %}
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if error_message %}
+                        <p style="color: red"><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <strong>Auktionsbeskrivning : </strong> {{ auction.description }}<br/>
+                     {% if auction.bid_price %}
+                     <strong>Nuvarande Pris : </strong> {{ auction.bid_price }} EUR<br/><br/>
+                     {% else %}
+                     <strong>Nuvarande Pris : </strong> {{ auction.starting_price }} EUR<br/><br/>
+                     {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="hidden" name="revision" value="{{ auction.revision }}" />
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Bud</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Vad är nuvarande pris?</h3>
+                    <p>Nuvarande pris motsvarar högsta budbeloppet. Om det inte finns några budgivare är nuvarande pris auktionspris</p>
+                    <h3>I vilken valuta jag erbjuder?</h3>
+                    <p>Du kan bara bjuda i EURO för nu.</p>
+                    <h3>Hur mycket belopp kan jag bjuda på?</h3>
+                    <p>Du kan bjuda så mycket du vill, men ditt bud bör vara högre än nuvarande pris ... </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

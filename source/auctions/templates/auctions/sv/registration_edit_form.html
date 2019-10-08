@@ -1,0 +1,41 @@
+{% extends 'auctions/base.html' %}
+{% block title %}Redigera Profil{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!--<h3>Register for an Account</h3>-->
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'auctions/form-template.html' %}
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-success">Lämna</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Hur kan jag ändra e-post?</h3>
+                    <p>Du kan ändra e-postadress(email) genom att skriva över ditt e-post-ID i den angivna rutan?</p>
+                    <h3>Vad händer om jag inte vill byta lösenord?</h3>
+                    <p>Om du inte vill ändra ditt gamla lösenord kan du skriva den gamla. Det är också för bekräftelse.</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

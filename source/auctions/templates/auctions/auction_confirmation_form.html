@@ -1,0 +1,43 @@
+{% extends base_template %}
+{% block title %}Confirm Auction{% endblock %}
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="{% url 'auctions:auction-confirm'%}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h3>Are you sure you want to create the auction?</h3>
+                        <div class="form-group">
+                            <div class="col-sm-offset-1 col-sm-1">
+                            <label class="radio">
+                             <input type="radio" name="confirm" id="confirmY" value="True" checked>
+                                Yes
+                                </label>
+                            </div>
+                            <div class="col-sm-offset-1 col-sm-1">
+                            <label class="radio">
+                            <input type="radio" name="confirm" id="confirmN" value="False">
+                                No
+                            </label>
+                            </div>
+                            <br/>
+                            <div class="col-sm-offset-1 col-sm-12">
+                                <button type="submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

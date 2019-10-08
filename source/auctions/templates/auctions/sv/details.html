@@ -1,0 +1,172 @@
+{% extends base_template %}
+{% block title %}Detaljer{% endblock %}
+
+{% block body %}
+{% load staticfiles %}
+{% load app_filters %}
+    <script>
+        hourd = {{ hours }};
+        minuted = {{ minutes }} + 1;
+    window.setInterval(function() {
+        var elem = document.getElementById("end");
+        if (minuted == 0)
+        {
+            if (hourd !=0 ) {
+                hourd = hourd - 1;
+                minuted = 59;
+               elem.innerHTML = hourd + ' H ' + minuted + ' M';
+            }
+            else
+                elem.innerHTML = "Slutade";
+        }
+        else{
+            minuted = minuted - 1;
+            elem.innerHTML = hourd + ' H ' + minuted + ' M';
+            }
+
+        }, 60000);
+    </script>
+<div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <!-- Left Auction Info -->
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="javascript:;">
+                            <img src="{%  static 'auctions/images/auction_logo.jpg' %}" class="img-responsive">
+                    </a>
+                    <h1 data-toggle="tooltip" title="{{ auction.title }}" style="overflow: hidden">{{ auction.title}} <small>{{ auction.status }}</small></h1>
+                    <h5 data-toggle="tooltip" title="Slutdatum" style="overflow: hidden">Slutdatum(UTC): {{ auction.end_date }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Auction Info -->
+        <div class="col-sm-8 col-md-9">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="javascript:;">Valuta</a></li>
+                <li>
+
+                    <form name="form" onChange="form.submit();" class="form" role="curr" method="get" action="">
+                    <div class="form-group">
+                    <select class="form-control" name="curr">
+                            {% for option in currency_options %}
+                                <option value="{{ option.value }}" {% if option.value == currency %}selected{% endif %}>{{ option.name }}</option>
+                            {% endfor %}
+                    </select>
+                    </div>
+                    </form>
+                </li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>Auktions Detaljer</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Nuvarande Pris</th>
+                            <th>Slutar I</th>
+                            <th>Budgivare Count</th>
+                            <th>Högsta budgivare</th>
+                            <th>Säljare</th>
+                            <th>Handlingar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% if auction.bid_price %}
+                                <td>{{ auction.bid_price|multiply:currency_val }} <strong>{{ currency }}</strong></td>
+                                {% else %}
+                                <td>{{ auction.starting_price|multiply:currency_val }} <strong>{{ currency }}</strong></td>
+                                {% endif %}
+                                <td id="end">{{ hours }} H {{ minutes }} M</td>
+                                <td>{{ auction.bid_set.all.count }}</td>
+                                <td>
+                                    {% if auction.bid_set.all.count > 0 %}
+                                    {% for data in auction.bid_set.all %}
+                                        {% if data.bidder.pk == auction.winner_id %}
+                                            {% if user.id != auction.winner_id %}
+                                                {{ data.bidder }}
+                                            {% else %}
+                                                DU
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                        Ingen budgivare
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ auction.seller.username }}
+                                </td>
+                                <td>
+                                    {% if user.id != auction.seller.id %}
+                                    {% if user.id != auction.winner_id %}
+                                    <a href="{% url 'auctions:bid' auction.id %}">
+                                        <button  class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Bud
+                                        </button>
+                                    </a>
+                                    {% else %}
+                                        {% if user.is_authenticated %}
+                                        <button  class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Du är högstbjudande
+                                        </button>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% else %}
+                                        <button  class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Säljaren kan inte bjuda
+                                        </button>
+                                    {% endif %}
+                                    {% if user.is_superuser %}
+                                    <a href="{% url 'auctions:auction-ban' auction.id %}">
+                                        <button  class="btn btn-dark btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Ban
+                                        </button>
+
+                                    </a>
+                                    {% endif %}
+                                    {% if user.id == auction.seller.id %}
+                                    <a href="{% url 'auctions:auction-update' auction.id %}">
+                                        <button  class="btn btn-dark btn-xs">
+                                                <span class="glyphicon glyphicon-remove"></span>&nbsp; Redigera
+                                        </button>
+
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Titel</h4>
+                    {{ auction.title }}
+
+                    <h4>Beskrivning</h4>
+                    {{ auction.description }}
+
+                    <h4>Alla Budgivare</h4>
+                    {% for data in auction.bid_set.all %}
+                         {{ data.bidder }}<br />
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

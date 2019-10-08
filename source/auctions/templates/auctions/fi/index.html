@@ -1,0 +1,69 @@
+{% extends base_template %}
+
+{% block title %}Huutokaupat{% endblock %}
+{% block body %}
+{% load staticfiles %}
+<div class="albums-container container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{{ heading }}</h3>
+        </div>
+        {% if object_list %}
+            {% for auction in object_list %}
+
+                <div class="col-sm-4 col-lg-2">
+                        <div class="thumbnail">
+                        {% if auction.status == 'Banned' %}
+                        <a href="javascript:;">
+                            <img src="{% static 'auctions/images/auction_logo.jpg' %}" class="img-responsive">
+                        </a>
+                        {% else %}
+                        <a href="{% url 'auctions:detail' auction.id%}">
+                            <img src="{% static 'auctions/images/auction_logo.jpg' %}" class="img-responsive">
+                        </a>
+                        {% endif %}
+                        <div class="caption">
+                            <h3 data-toggle="tooltip" title="{{ auction.title }}" style="overflow: hidden">{{ auction.title }}</h3>
+                            <h5><strong>Myyjä : </strong>{{ auction.seller }}</h5>
+
+                            <!-- View Details -->
+                            <a data-toggle="tooltip" title="Status" href="javascripr:;" class="btn btn-primary btn-sm" role="button">{{ auction.status }}</a>
+
+
+                            <!-- Un-ban Auction-->
+                            {% if auction.status == 'Banned' %}
+                                <a href="{% url 'auctions:auction-unban' auction.id %}">
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span data-toggle="tooltip" title="Un-Ban" class="glyphicon glyphicon-ok"></span>
+                                    Poista Ban
+                                </button>
+                                </a>
+                            {% endif %}
+
+                            <!-- End Date -->
+                            <a data-toggle="tooltip" title="Lopetuspäivä ja aika" href="javascripr:;" class="btn btn-default btn-sm btn-favorite" role="button">
+                                <span class="">&nbsp;{{ auction.end_date }}</span>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+            {% endfor %}
+        {% else %}
+            {% if heading != 'Banned Auctions' %}
+                <div class="col-sm-12">
+                    <br>
+                    <a href="{% url 'auctions:auction-add' %}">
+                        <button type="button" class="btn btn-success">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp; Lisää Huutokauppa
+                        </button>
+                    </a>
+                </div>
+            {% endif %}
+        {% endif %}
+     </div>
+
+    </div>
+{% endblock %}
